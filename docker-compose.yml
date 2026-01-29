@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: ultra-pro-max-bot
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - API_ID=${API_ID}
+      - API_HASH=${API_HASH}
+      - MONGO_URI=${MONGO_URI}
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - ALLOWED_GROUP_ID=${ALLOWED_GROUP_ID}
+      - ADMIN_REQ_CHANNEL_ID=${ADMIN_REQ_CHANNEL_ID}
+      - LOG_CHANNEL_ID=${LOG_CHANNEL_ID:-0}
+      - PORT=10000
+      - DEBUG_MODE=${DEBUG_MODE:-0}
+    ports:
+      - "10000:10000"
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:10000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
